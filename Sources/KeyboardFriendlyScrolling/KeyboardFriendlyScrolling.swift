@@ -4,13 +4,16 @@ public class KeyboardFriendlyScrollController {
     private weak var viewController: UIViewController?
     private let scrollView: UIScrollView
     private let defaultContentInsets: UIEdgeInsets
+    private let minSpaceToKeyboard: CGFloat
 
     private var keyboardObservers: [NSObjectProtocol] = []
 
-    public init(viewController: UIViewController, scrollView: UIScrollView, defaultContentInsets: UIEdgeInsets = .zero) {
+    public init(viewController: UIViewController, scrollView: UIScrollView, minSpaceToKeyboard: CGFloat = 0, defaultContentInset: UIEdgeInsets? = nil) {
         self.viewController = viewController
         self.scrollView = scrollView
-        self.defaultContentInsets = defaultContentInsets
+
+        self.defaultContentInsets = defaultContentInset ?? scrollView.contentInset
+        self.minSpaceToKeyboard = minSpaceToKeyboard
     }
 
     deinit {
@@ -38,11 +41,11 @@ public class KeyboardFriendlyScrollController {
 
     private func keyboardWasShown(_ notification: Notification) {
         guard let keyboardFrame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
-            let view = viewController?.view,
-            let window = view.window
+            let view = viewController?.view
             else { return }
+
         let scrollViewAbsoluteFrame = view.convert(scrollView.frame, to: nil)
-        let overlapHeight = scrollViewAbsoluteFrame.maxY - (window.bounds.height - keyboardFrame.height)
+        let overlapHeight = scrollViewAbsoluteFrame.maxY - keyboardFrame.minY + minSpaceToKeyboard
         if overlapHeight > 0 {
             var contentInsets = defaultContentInsets
             contentInsets.bottom += overlapHeight
