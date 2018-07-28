@@ -8,7 +8,7 @@ public class KeyboardFriendlyScrollController {
 
     private var keyboardObservers: [NSObjectProtocol] = []
 
-    public init(viewController: UIViewController, scrollView: UIScrollView, minSpaceToKeyboard: CGFloat = 0, defaultContentInset: UIEdgeInsets? = nil) {
+    public init(viewController: UIViewController, scrollView: UIScrollView, minSpaceToKeyboard: CGFloat = 20, defaultContentInset: UIEdgeInsets? = nil) {
         self.viewController = viewController
         self.scrollView = scrollView
 
