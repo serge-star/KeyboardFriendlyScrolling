@@ -1,15 +1,13 @@
 import UIKit
 
 public class KeyboardFriendlyScrollController {
-    private weak var viewController: UIViewController?
     private let scrollView: UIScrollView
     private let defaultContentInsets: UIEdgeInsets
     private let minSpaceToKeyboard: CGFloat
 
     private var keyboardObservers: [NSObjectProtocol] = []
 
-    public init(viewController: UIViewController, scrollView: UIScrollView, minSpaceToKeyboard: CGFloat = 20, defaultContentInset: UIEdgeInsets? = nil) {
-        self.viewController = viewController
+    public init(scrollView: UIScrollView, minSpaceToKeyboard: CGFloat = 20, defaultContentInset: UIEdgeInsets? = nil) {
         self.scrollView = scrollView
 
         self.defaultContentInsets = defaultContentInset ?? scrollView.contentInset
@@ -41,7 +39,7 @@ public class KeyboardFriendlyScrollController {
 
     private func keyboardWasShown(_ notification: Notification) {
         guard let keyboardFrame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
-            let view = viewController?.view
+            let view = scrollView.superview
             else { return }
 
         let scrollViewAbsoluteFrame = view.convert(scrollView.frame, to: nil)
